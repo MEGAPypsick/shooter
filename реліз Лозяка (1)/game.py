@@ -46,7 +46,6 @@ class Player(GameSprite):
               
     def fire(self):
         keys_pressed = key.get_pressed()
-
         bullet = Bullet('pulae.png',self.rect.centerx+30,self.rect.top + 20,15,20,10,0)
         bullets.add(bullet)
         
@@ -58,10 +57,9 @@ class Player(GameSprite):
 class Met(GameSprite):
     def update(self):
         if self.rect.y > 10 and  self.rect.y < 500:
-            self.rect.y -= 15
+            self.rect.y -= 7
         if self.rect.y <20 :
             self.rect.y += 450
-        
 
 
 
@@ -73,11 +71,9 @@ class Bullet(GameSprite):
 
 class Bullet_m(GameSprite):
     def update(self):
-        self.rect.x += self.speed
-        if self.rect.x > 0 :
-            self.rect.x -= self.speed
-        # if self.rect.x < win_width :
-        #     self.rect.x -= self.speed
+        self.rect.x -= self.speed
+        if self.rect.x < 0 :
+            self.kill()
 
 
 
@@ -156,8 +152,23 @@ while run:
             
         if sprite.spritecollide(enemy,bullets, True):
             enemy.health -=1
-            
-          
+
+
+
+        hits = sprite.spritecollide(met,bullets, False)
+
+        for bullet in hits:
+            bullet.kill()
+
+
+
+        hitss = sprite.spritecollide(met,bullets_m, False)
+
+        for bullet in hitss:
+            bullet.kill()
+                
+
+
         if raket.health < 0 :
             finish = True
             txt_lose_game = font.render('Player 1 Win',True,(255,15,51))
